@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Simple PHP App</title>
+        <title>PHP Application for DevOps Demostration</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="assets/css/bootstrap.min.css" rel="stylesheet">
         <style>body {margin-top: 40px; background-color: #333;}</style>
@@ -15,9 +15,9 @@
     <body>
         <div class="container">
             <div class="hero-unit">
-                <h1>Simple PHP App</h1>
-                <h2>Congratulations</h2>
-                <p>Your PHP application is now running on a container in Docker Swarm</p>
+                <h1>Sample PHP Application</h1>
+                <h2>Demostration for DevOps Project 2 by Choy Wei Feng</h2>
+                <p>The PHP application is now running on a container in Docker Swarm</p>
                 <p>The Kubernetes Docker container is running on <?php echo gethostname() ?> with PHP version <?php echo phpversion(); ?>.</p>
                 <?php
                         $myfile = fopen("/var/www/my-vol/date", "r") or die("");
