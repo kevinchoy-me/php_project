@@ -1,7 +1,7 @@
 node {
   
   stage('Checkout Source Code') {
-    checkout scm
+    checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub Credential', url: 'https://github.com/kevinchoy-me/php_project.git']]])
   }
 
   stage('Create Docker Image') {
@@ -11,20 +11,17 @@ node {
   stage ('Run Application') {
     try {
       // Stop existing Container
-      sh 'docker rm docker_container -f'
+      sh 'docker rm php_project_container -f'
       // Start database container here
-      sh "docker run -d --name docker_container docker_image:${env.BUILD_NUMBER}"
+      sh "docker run -d --name php_project_container -p 80:80 docker_image:${env.BUILD_NUMBER}"
     } 
 	catch (error) {
     } finally {
       // Stop and remove database container here
-      
     }
   }
   
   stage ('Notifications') {
-    mail body: "Project Execution Completed with status : " + currentBuild.result ,
-                     subject: 'Project Execution Notification',
-                     to: 'abc@abc.com'
+        // Notification
      }
  }
