@@ -6,15 +6,15 @@ node {
 
   stage('Create Docker Image') {
 	// Build Docker Image
-    docker.build("docker_image:${env.BUILD_NUMBER}")
+    docker.build("php_project_image:${env.BUILD_NUMBER}")
   }
   
   stage('Upload Docker Image to Docker Hub')
   {
 	// Tag and push Docker Image to Docker Hub
 	withDockerRegistry(credentialsId: 'DockerHub Credentials') {
-		sh "docker tag docker_image:${env.BUILD_NUMBER} kevinchoy007/docker_image:${env.BUILD_NUMBER}"
-		sh "docker push kevinchoy007/docker_image:${env.BUILD_NUMBER}"
+		sh "docker tag php_project_image:${env.BUILD_NUMBER} kevinchoy007/php_project_image:${env.BUILD_NUMBER}"
+		sh "docker push kevinchoy007/php_project_image:${env.BUILD_NUMBER}"
 	}
   }
 
@@ -23,13 +23,13 @@ node {
 	
 	// Pull Docker Image from DockerHub
 	  withDockerRegistry(credentialsId: 'DockerHub Credentials') {
-		sh "docker pull kevinchoy007/docker_image:${env.BUILD_NUMBER}"
+		sh "docker pull kevinchoy007/php_project_image:${env.BUILD_NUMBER}"
 	}
 
       // Stop existing Container
       sh 'docker rm php_project_container -f'
       // Start database container here
-      sh "docker run -d --name php_project_container -p 80:80 docker_image:${env.BUILD_NUMBER}"
+      sh "docker run -d --name php_project_container -p 80:80 php_project_image:${env.BUILD_NUMBER}"
     } 
 	catch (error) {
     }
