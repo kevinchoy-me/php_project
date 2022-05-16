@@ -14,7 +14,7 @@ node {
   
   stage('Upload Docker Image to Docker Hub')
   {
-	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+	sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
 	sh 'docker tag docker_image:${env.BUILD_NUMBER} kevinchoy007/docker_image:${env.BUILD_NUMBER}'
 	sh 'docker push kevinchoy007/docker_image:${env.BUILD_NUMBER}'
   }
