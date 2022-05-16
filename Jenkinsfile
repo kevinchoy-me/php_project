@@ -1,19 +1,17 @@
 node {
-  
-  environment {
-	DOCKERHUB_CREDENTIALS=credentials('DockerHub Credentials')
-  }
-  
   stage('Checkout Source Code') {
+	// Checkout code from GitHub
     checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub Credential', url: 'https://github.com/kevinchoy-me/php_project.git']]])
   }
 
   stage('Create Docker Image') {
+	// Build Docker Image
     docker.build("docker_image:${env.BUILD_NUMBER}")
   }
   
   stage('Upload Docker Image to Docker Hub')
   {
+	// Tag and push Docker Image to Docker Hub
 	withDockerRegistry(credentialsId: 'DockerHub Credentials') {
 		sh "docker tag docker_image:${env.BUILD_NUMBER} kevinchoy007/docker_image:${env.BUILD_NUMBER}"
 		sh "docker push kevinchoy007/docker_image:${env.BUILD_NUMBER}"
@@ -23,6 +21,7 @@ node {
   stage ('Run Application') {
     try {
 	
+	// Pull Docker Image from DockerHub
 	  withDockerRegistry(credentialsId: 'DockerHub Credentials') {
 		sh "docker pull kevinchoy007/docker_image:${env.BUILD_NUMBER}"
 	}
@@ -33,8 +32,6 @@ node {
       sh "docker run -d --name php_project_container -p 80:80 docker_image:${env.BUILD_NUMBER}"
     } 
 	catch (error) {
-    } finally {
-      // Stop and remove database container here
     }
   }
   
