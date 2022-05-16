@@ -16,7 +16,7 @@
         <div class="container">
             <div class="hero-unit">
                 <h1>Sample PHP Application</h1>
-                <h2>Demostration for DevOps Project 2 by Choy Wei Feng</h2>
+                <h2>Demostration for Simplilearn DevOps Project 2 by Choy Wei Feng</h2>
                 <p>The PHP application is now running on a container in Docker Swarm</p>
                 <p>The Kubernetes Docker container is running on <?php echo gethostname() ?> with PHP version <?php echo phpversion(); ?>.</p>
                 <?php
