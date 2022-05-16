@@ -15,8 +15,8 @@ node {
   stage('Upload Docker Image to Docker Hub')
   {
 	withDockerRegistry(credentialsId: 'DockerHub Credentials') {
-		sh 'docker tag docker_image:${env.BUILD_NUMBER} kevinchoy007/docker_image:${env.BUILD_NUMBER}'
-		sh 'docker push kevinchoy007/docker_image:${env.BUILD_NUMBER}'
+		sh 'docker tag docker_image:$(env.BUILD_NUMBER) kevinchoy007/docker_image:$(env.BUILD_NUMBER)'
+		sh 'docker push kevinchoy007/docker_image:$(env.BUILD_NUMBER)'
 	}
 
   }
