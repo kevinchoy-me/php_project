@@ -1,5 +1,9 @@
 node {
   
+  environment {
+	DOCKERHUB_CREDENTIALS=credentials('DockerHub Credentials')
+  }
+  
   stage('Checkout Source Code') {
     checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub Credential', url: 'https://github.com/kevinchoy-me/php_project.git']]])
   }
@@ -7,10 +11,18 @@ node {
   stage('Create Docker Image') {
     docker.build("docker_image:${env.BUILD_NUMBER}")
   }
+  
+  stage('Upload Docker Image to Docker Hub')
+  {
+	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+	sh 'docker tag docker_image:${env.BUILD_NUMBER} kevinchoy007/docker_image:${env.BUILD_NUMBER}'
+	sh 'docker push kevinchoy007/docker_image:${env.BUILD_NUMBER}'
+  }
 
   stage ('Run Application') {
     try {
       // Stop existing Container
+	  sh 'docker pull kevinchoy007/docker_image:${env.BUILD_NUMBER}'
       sh 'docker rm php_project_container -f'
       // Start database container here
       sh "docker run -d --name php_project_container -p 80:80 docker_image:${env.BUILD_NUMBER}"
