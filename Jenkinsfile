@@ -18,13 +18,16 @@ node {
 		sh "docker tag docker_image:${env.BUILD_NUMBER} kevinchoy007/docker_image:${env.BUILD_NUMBER}"
 		sh "docker push kevinchoy007/docker_image:${env.BUILD_NUMBER}"
 	}
-
   }
 
   stage ('Run Application') {
     try {
+	
+	  withDockerRegistry(credentialsId: 'DockerHub Credentials') {
+		sh "docker pull kevinchoy007/docker_image:${env.BUILD_NUMBER}"
+	}
+
       // Stop existing Container
-	  sh 'docker pull kevinchoy007/docker_image:${env.BUILD_NUMBER}'
       sh 'docker rm php_project_container -f'
       // Start database container here
       sh "docker run -d --name php_project_container -p 80:80 docker_image:${env.BUILD_NUMBER}"
