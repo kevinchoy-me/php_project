@@ -28,7 +28,6 @@ node {
 
       // Stop existing Container
       sh 'docker rm php_project_container -f'
-      // Start database container here
       sh "docker run -d --name php_project_container -p 80:80 php_project_image:${env.BUILD_NUMBER}"
     } 
 	catch (error) {
